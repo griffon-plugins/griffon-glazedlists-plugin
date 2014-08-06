@@ -1,0 +1,3 @@
+
+:link_glazedlists: link:http://www.glazedlists.com/[GlazedLists, window="_blank"]
+:link_groovy_module_extension: link:http://groovy.codehaus.org/Creating+an+extension+module[Groovy Module Extension, window="_blank"]

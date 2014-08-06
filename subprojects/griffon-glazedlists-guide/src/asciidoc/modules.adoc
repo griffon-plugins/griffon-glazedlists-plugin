@@ -1,0 +1,188 @@
+
+[[_modules]]
+= Modules
+:subproject-base: {rootdir}/subprojects/griffon-glazedlists-
+:java-source: /src/main/java/
+:groovy-source: /src/main/groovy/
+:package-base: org/codehaus/griffon/runtime/
+:numbered:
+
+The following sections display all bindings per module. Use this information to
+successfully override a binding on your own modules or to troubleshoot a module
+binding if the wrong type has been applied by the Griffon runtime.
+
+== Swing
+
+Module name: +glazedlists-swing-groovy+
+
+Depends on: +swing-groovy+
+
+[source,java,options="nowrap"]
+----
+include::{subproject-base}swing-groovy{groovy-source}{package-base}swing/glazedlists/GlazedlistsSwingGroovyModule.java[tags=bindings,indent=0]
+----
+
+=== Nodes 
+The following nodes will become available on a Groovy View
+
+.defaultTableFormat
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| columnNames        | List                 | yes        | no         |
+| columns            | List<Map<String, ?>> | yes        | no         |
+| columns.name       | String               | yes        | no         | column's name
+| columns.title      | String               | no         | no         | column's title
+| columns.read       | Closure              | no         | no         | element property reader
+| read               | Closure              | no         | no         | default element property reader
+|===
+
+.defaultAdvancedTableFormat
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| columns            | List<Map<String, ?>> | yes        | no         |
+| columns.name       | String               | yes        | no         | column's name
+| columns.title      | String               | no         | no         | column's title
+| columns.class      | Class                | no         | no         | column's class
+| columns.comparator | Comparator           | no         | no         | column's comparator
+| columns.read       | Closure              | no         | no         | element property reader
+| read               | Closure              | no         | no         | default element property reader
+|===
+
+.defaultWritableTableFormat
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| columns            | List<Map<String, ?>> | yes        | no         |
+| columns.name       | String               | yes        | no         | column's name
+| columns.title      | String               | no         | no         | column's title
+| columns.class      | Class                | no         | no         | column's class
+| columns.comparator | Comparator           | no         | no         | column's comparator
+| columns.read       | Closure              | no         | no         | element property reader
+| columns.write      | Closure              | no         | no         | element property writer
+| columns.editable   | Closure              | no         | no         | is this column editable?
+| read               | Closure              | no         | no         | default element property reader
+| write              | Closure              | no         | no         | default element property writer
+| editable           | Closure              | no         | no         | default editable state evaluator
+|===
+
+.eventComboBoxModel
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| source             | EventList            | yes        | no         |
+| wrap               | boolean              | no         | no         | wrap source with Thread safe proxy
+|===
+
+.eventListModel
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| source             | EventList            | yes        | no         |
+| wrap               | boolean              | no         | no         | wrap source with Thread safe proxy
+|===
+
+.eventTableModel
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| source             | EventList            | yes        | no         |
+| format             | TableFormat          | yes        | no         |
+| wrap               | boolean              | no         | no         | wrap source with Thread safe proxy
+|===
+
+.eventTreeModel
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| source             | TreeList             | yes        | no         |
+|===
+
+.eventJXTableModel
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| source             | EventList            | yes        | no         |
+| format             | TableFormat          | yes        | no         |
+|===
+
+The +wrap:+ property in +eventComboBoxModel+, +eventListModel+ and +eventTableModel+
+defaults to +true+.
+
+=== Methods 
+
+The following methods become available as well
+
+*installTableComparatorChooser(Map args)* - install a TableComparatorChooser on a target JTable
+
+[options="3*,header"]
+|===
+| Argument | Type      | Default
+| target   | JTable    | builder's +current+ node
+| source   | EventList |
+| strategy | Object    | AbstractTableComparatorChooser.SINGLE_COLUMN
+|===
+
+*installTTreeTableSupport(Map args)* - install a TableComparatorChooser on a target JTable
+
+[options="3*,header"]
+|===
+| Argument | Type     | Default
+| target   | JTable   | builder's +current+ node
+| source   | TreeList |
+| index    | int      | 1
+|===
+
+*installComboBoxAutoCompleteSupport(Map args)* - install a TableComparatorChooser on a target JTable
+
+[options="3*,header"]
+|===
+| Argument       | Type           | Default
+| target         | JComboBox      | builder's +current+ node
+| items          | EventList      |
+| textFilterator | TextFilterator |
+| format         | Format         |
+|===
+
+*installEventSelectionModel(Map args)* - install an EventSelectionModel on a target JTable
+
+[options="3*,header"]
+|===
+| Argument      | Type      | Default
+| target        | JComboBox | builder's +current+ node
+| source        | EventList |
+| selectionMode | int       | ListSelectionModel.SINGLE_SELECTION
+|===
+
+*installJXTableSorting(Map args)* - using a JXTables native sorting system instead of glazedlists
+
+[options="3*,header"]
+|===
+| Argument | Type       | Default
+| target   | JComboBox  | builder's +current+ node
+| source   | SortedList |
+| multiple | boolean    | false
+|===
+
+=== MetaProgramming 
+
+The following classes have been enhanced using the {link_groovy_module_extension} feature of Groovy 2.0
+
+*ca.odell.glazedlists.util.concurrent.Lock*
+
+ * *withLock(Closure)* - this method executes the closure in the context of Lock, by acquiring and releasing
+   the lock around the execution; like this
+
+[source,groovy]
+----
+lock.lock()
+try { closure() }
+finally { lock.unlock() }
+----
+
+*ca.odell.glazedlists.EventList*
+
+ * *withReadLock(Closure)* - builds on top of +Lock.withLock+, decorating the List's ReadLock.
+ * *withWriteLock(Closure)* - builds on top of +Lock.withLock+, decorating the List's WriteLock.
+

@@ -1,0 +1,7 @@
+apply plugin: 'java'
+apply from: rootProject.file('gradle/code-coverage.gradle')
+
+dependencies {
+    compile "org.codehaus.griffon:griffon-core:${griffonVersion}"
+    compile "net.java.dev.glazedlists:glazedlists_java15:$glazedlistsVersion"
+}
