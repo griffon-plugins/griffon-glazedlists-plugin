@@ -8,6 +8,7 @@ image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link
 image:https://api.bintray.com/packages/griffon/griffon-plugins/{project-name}/images/download.svg[link="https://bintray.com/griffon/griffon-plugins/{project-name}/_latestVersion"]
 
 ---
+link:http://www.glazedlists.com/[GlazedLists, window="_blank"] - List transformations in Java.
 
 Refer to the link:http://griffon-plugins.github.io/{project-name}/[plugin guide, window="_blank"] for
 further information on configuration and usage.
