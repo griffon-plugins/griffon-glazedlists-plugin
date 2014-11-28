@@ -13,9 +13,9 @@ binding if the wrong type has been applied by the Griffon runtime.
 
 == Swing
 
-Module name: +glazedlists-swing-groovy+
+Module name: `glazedlists-swing-groovy`
 
-Depends on: +swing-groovy+
+Depends on: `swing-groovy`
 
 [source,java,options="nowrap"]
 ----
@@ -107,8 +107,8 @@ The following nodes will become available on a Groovy View
 | format             | TableFormat          | yes        | no         |
 |===
 
-The +wrap:+ property in +eventComboBoxModel+, +eventListModel+ and +eventTableModel+
-defaults to +true+.
+The `wrap:` property in `eventComboBoxModel`, `eventListModel` and `eventTableModel`
+defaults to `true`.
 
 === Methods 
 
@@ -119,7 +119,7 @@ The following methods become available as well
 [options="3*,header"]
 |===
 | Argument | Type      | Default
-| target   | JTable    | builder's +current+ node
+| target   | JTable    | builder's `current` node
 | source   | EventList |
 | strategy | Object    | AbstractTableComparatorChooser.SINGLE_COLUMN
 |===
@@ -129,7 +129,7 @@ The following methods become available as well
 [options="3*,header"]
 |===
 | Argument | Type     | Default
-| target   | JTable   | builder's +current+ node
+| target   | JTable   | builder's `current` node
 | source   | TreeList |
 | index    | int      | 1
 |===
@@ -139,7 +139,7 @@ The following methods become available as well
 [options="3*,header"]
 |===
 | Argument       | Type           | Default
-| target         | JComboBox      | builder's +current+ node
+| target         | JComboBox      | builder's `current` node
 | items          | EventList      |
 | textFilterator | TextFilterator |
 | format         | Format         |
@@ -150,7 +150,7 @@ The following methods become available as well
 [options="3*,header"]
 |===
 | Argument      | Type      | Default
-| target        | JComboBox | builder's +current+ node
+| target        | JComboBox | builder's `current` node
 | source        | EventList |
 | selectionMode | int       | ListSelectionModel.SINGLE_SELECTION
 |===
@@ -160,7 +160,7 @@ The following methods become available as well
 [options="3*,header"]
 |===
 | Argument | Type       | Default
-| target   | JComboBox  | builder's +current+ node
+| target   | JComboBox  | builder's `current` node
 | source   | SortedList |
 | multiple | boolean    | false
 |===
@@ -183,6 +183,6 @@ finally { lock.unlock() }
 
 *ca.odell.glazedlists.EventList*
 
- * *withReadLock(Closure)* - builds on top of +Lock.withLock+, decorating the List's ReadLock.
- * *withWriteLock(Closure)* - builds on top of +Lock.withLock+, decorating the List's WriteLock.
+ * *withReadLock(Closure)* - builds on top of `Lock.withLock`, decorating the List's ReadLock.
+ * *withWriteLock(Closure)* - builds on top of `Lock.withLock`, decorating the List's WriteLock.
 
