@@ -4,27 +4,27 @@
 <meta charset="utf-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.0.preview.7">
+<meta name="generator" content="Asciidoctor 1.5.2">
 <meta name="author" content="Andres Almiray">
-<title>Griffon Glazedlists Plugin 1.0.0-SNAPSHOT</title>
+<title>Griffon Glazedlists Plugin</title>
 <link rel="stylesheet" href="./css/style.css">
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="./coderay-asciidoctor.css">
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>Griffon Glazedlists Plugin 1.0.0-SNAPSHOT</h1>
+<h1>Griffon Glazedlists Plugin</h1>
+<div class="details">
 <span id="author" class="author">Andres Almiray</span><br>
-<span id="revnumber">version 1.0.0-SNAPSHOT</span>
+<span id="revnumber">version 1.0.0</span>
+</div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_introduction">1. Introduction</a></li>
-<li><a href="#_configuration">2. Configuration</a></li>
-<li>
+<li><a href="#_configuration">2. Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_gradle">2.1. Gradle</a></li>
-<li>
+<li><a href="#_gradle">2.1. Gradle</a>
 <ul class="sectlevel3">
 <li><a href="#_automatic">2.1.1. Automatic</a></li>
 <li><a href="#_manual">2.1.2. Manual</a></li>
@@ -33,11 +33,9 @@
 <li><a href="#_maven">2.2. Maven</a></li>
 </ul>
 </li>
-<li><a href="#_modules">3. Modules</a></li>
-<li>
+<li><a href="#_modules">3. Modules</a>
 <ul class="sectlevel2">
-<li><a href="#_swing">3.1. Swing</a></li>
-<li>
+<li><a href="#_swing">3.1. Swing</a>
 <ul class="sectlevel3">
 <li><a href="#_nodes">3.1.1. Nodes</a></li>
 <li><a href="#_methods">3.1.2. Methods</a></li>
@@ -79,8 +77,8 @@ may include the following snippet in <code>build.gradle</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="groovy language-groovy">dependencies {
-    griffon 'org.codehaus.griffon.plugins:griffon-glazedlists-plugin:1.0.0-SNAPSHOT'
+<pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
+    griffon 'org.codehaus.griffon.plugins:griffon-glazedlists-plugin:1.0.0'
 }</code></pre>
 </div>
 </div>
@@ -96,16 +94,16 @@ may include the following snippet in <code>build.gradle</code></p>
 <div class="listingblock">
 <div class="title">Java + Swing</div>
 <div class="content">
-<pre class="CodeRay nowrap"><code class="groovy language-groovy">dependencies {
-    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing:1.0.0-SNAPSHOT'
+<pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
+    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing:1.0.0'
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Groovy + Swing</div>
 <div class="content">
-<pre class="CodeRay nowrap"><code class="groovy language-groovy">dependencies {
-    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing-groovy:1.0.0-SNAPSHOT'
+<pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
+    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing-groovy:1.0.0'
 }</code></pre>
 </div>
 </div>
@@ -119,12 +117,12 @@ snippet before the <code>&lt;build&gt;</code> element</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="xml language-xml"><span class="tag">&lt;dependencyManagement&gt;</span>
+<pre class="CodeRay highlight nowrap"><code data-lang="xml"><span class="tag">&lt;dependencyManagement&gt;</span>
     <span class="tag">&lt;dependencies&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>griffon-glazedlists-plugin<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;version&gt;</span>1.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+            <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
             <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
             <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
@@ -138,7 +136,7 @@ snippet before the <code>&lt;build&gt;</code> element</p>
 <div class="listingblock">
 <div class="title">Java + Swing</div>
 <div class="content">
-<pre class="CodeRay nowrap"><code class="xml language-xml"><span class="tag">&lt;dependency&gt;</span>
+<pre class="CodeRay highlight nowrap"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>griffon-glazedlists-swing<span class="tag">&lt;/artifactId&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
@@ -147,7 +145,7 @@ snippet before the <code>&lt;build&gt;</code> element</p>
 <div class="listingblock">
 <div class="title">Groovy + Swing</div>
 <div class="content">
-<pre class="CodeRay nowrap"><code class="xml language-xml"><span class="tag">&lt;dependency&gt;</span>
+<pre class="CodeRay highlight nowrap"><code data-lang="xml"><span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>griffon-glazedlists-swing-groovy<span class="tag">&lt;/artifactId&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
@@ -174,7 +172,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay nowrap"><code class="java language-java">bind(BuilderCustomizer.class)
+<pre class="CodeRay highlight nowrap"><code data-lang="java">bind(BuilderCustomizer.class)
     .to(GlazedlistsSwingBuilderCustomizer.class)
     .asSingleton();</code></pre>
 </div>
@@ -184,7 +182,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 <div class="paragraph">
 <p>The following nodes will become available on a Groovy View</p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 1. defaultTableFormat</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -247,7 +245,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 2. defaultAdvancedTableFormat</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -317,7 +315,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 3. defaultWritableTableFormat</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -415,7 +413,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 4. eventComboBoxModel</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -450,7 +448,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 5. eventListModel</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -485,7 +483,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 6. eventTableModel</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -527,7 +525,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 7. eventTreeModel</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -555,7 +553,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 8. eventJXTableModel</caption>
 <colgroup>
 <col style="width: 20%;">
@@ -603,7 +601,7 @@ defaults to <code>true</code>.</p>
 <div class="paragraph">
 <p><strong>installTableComparatorChooser(Map args)</strong> - install a TableComparatorChooser on a target JTable</p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -637,7 +635,7 @@ defaults to <code>true</code>.</p>
 <div class="paragraph">
 <p><strong>installTTreeTableSupport(Map args)</strong> - install a TableComparatorChooser on a target JTable</p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -671,7 +669,7 @@ defaults to <code>true</code>.</p>
 <div class="paragraph">
 <p><strong>installComboBoxAutoCompleteSupport(Map args)</strong> - install a TableComparatorChooser on a target JTable</p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -710,7 +708,7 @@ defaults to <code>true</code>.</p>
 <div class="paragraph">
 <p><strong>installEventSelectionModel(Map args)</strong> - install an EventSelectionModel on a target JTable</p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -744,7 +742,7 @@ defaults to <code>true</code>.</p>
 <div class="paragraph">
 <p><strong>installJXTableSorting(Map args)</strong> - using a JXTables native sorting system instead of glazedlists</p>
 </div>
-<table class="tableblock frame-all grid-all" style="width: 100%;">
+<table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -794,7 +792,7 @@ the lock around the execution; like this</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay"><code class="groovy language-groovy">lock.lock()
+<pre class="CodeRay highlight"><code data-lang="groovy">lock.lock()
 <span class="keyword">try</span> { closure() }
 <span class="keyword">finally</span> { lock.unlock() }</code></pre>
 </div>
@@ -830,8 +828,8 @@ the lock around the execution; like this</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.0-SNAPSHOT<br>
-Last updated 2014-08-06 15:58:59 CEST
+Version 1.0.0<br>
+Last updated 2014-08-19 15:56:17 CEST
 </div>
 </div>
 </body>
