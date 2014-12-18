@@ -59,6 +59,23 @@ class DefaultTableFormatSpec extends Specification {
         }
     }
 
+    void 'Can create a TableFormat that handles a Map'() {
+        given:
+        Map props = [id: '1', name: 'Joe', lastname: 'Cool']
+
+        when:
+        TableFormat<Map> format = new DefaultTableFormat<Map>(props.keySet() as String[])
+
+        then:
+        format.columnCount == props.size()
+        format.columnNames == (props.keySet() as String[])
+        format.columnTitles == (props.keySet()*.capitalize() as String[])
+        props.eachWithIndex  { k, v, i ->
+            assert k.capitalize() == format.getColumnName(i)
+            assert v == format.getColumnValue(props, i)
+        }
+    }
+
     static class Person {
         String id
         String name

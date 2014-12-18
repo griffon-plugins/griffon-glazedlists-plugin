@@ -17,6 +17,7 @@ package griffon.plugins.glazedlists;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 
 import static griffon.util.GriffonClassUtils.getPropertyValue;
 import static griffon.util.GriffonNameUtils.uncapitalize;
@@ -29,6 +30,9 @@ public interface ColumnReader<E> {
         @Nullable
         @Override
         public Object getValue(@Nonnull Object baseObject, @Nonnull String columnName, int columnIndex) {
+            if (baseObject instanceof Map) {
+                return ((Map) baseObject).get(uncapitalize(columnName));
+            }
             return getPropertyValue(baseObject, uncapitalize(columnName));
         }
     };

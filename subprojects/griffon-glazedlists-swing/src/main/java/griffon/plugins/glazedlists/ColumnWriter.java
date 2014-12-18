@@ -17,6 +17,7 @@ package griffon.plugins.glazedlists;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 
 import static griffon.util.GriffonClassUtils.setPropertyValue;
 import static griffon.util.GriffonNameUtils.uncapitalize;
@@ -28,7 +29,11 @@ public interface ColumnWriter<E> {
     public static final ColumnWriter DEFAULT = new ColumnWriter() {
         @Override
         public void setValue(@Nonnull Object baseObject, @Nonnull String columnName, int columnIndex, @Nullable Object value) {
-            setPropertyValue(baseObject, uncapitalize(columnName), value);
+            if (baseObject instanceof Map) {
+                ((Map) baseObject).put(uncapitalize(columnName), value);
+            } else {
+                setPropertyValue(baseObject, uncapitalize(columnName), value);
+            }
         }
     };
 
