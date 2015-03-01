@@ -1,5 +1,8 @@
-include 'subprojects/griffon-glazedlists-swing'
+include 'subprojects/griffon-glazedlists-core'
+//include 'subprojects/griffon-glazedlists-javafx'
+include 'subprojects/griffon-glazedlists-core-groovy'
 include 'subprojects/griffon-glazedlists-swing-groovy'
+//include 'subprojects/griffon-glazedlists-javafx-groovy'
 include 'subprojects/griffon-glazedlists-guide'
 
 rootProject.name = 'griffon-glazedlists-plugin'

@@ -15,8 +15,11 @@ apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'com.bmuschko.java2html'
 
 ext.childProjects = [
-    ':griffon-glazedlists-swing',
+    ':griffon-glazedlists-core',
+//    ':griffon-glazedlists-javafx',
+    ':griffon-glazedlists-core-groovy',
     ':griffon-glazedlists-swing-groovy'
+//    ':griffon-glazedlists-javafx-groovy'
 ]
 
 

@@ -11,11 +11,11 @@ tasks.withType(GroovyCompile) {
     targetCompatibility = '1.7'
 }
 
+
 dependencies {
     compileOnly "org.codehaus.griffon:griffon-core-compile:${griffonVersion}"
 
     compile project(':griffon-glazedlists-core')
-    compile project(':griffon-glazedlists-core-groovy')
     compile "org.codehaus.griffon:griffon-swing-groovy:${griffonVersion}"
 
     testCompile "org.codehaus.griffon:griffon-core-test:$griffonVersion"

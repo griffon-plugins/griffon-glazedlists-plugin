@@ -20,8 +20,17 @@ import ca.odell.glazedlists.SortedList
 import ca.odell.glazedlists.TextFilterator
 import ca.odell.glazedlists.TreeList
 import ca.odell.glazedlists.gui.AbstractTableComparatorChooser
-import ca.odell.glazedlists.swing.*
-import griffon.builder.swing.factory.*
+import ca.odell.glazedlists.swing.AutoCompleteSupport
+import ca.odell.glazedlists.swing.EventListJXTableSorting
+import ca.odell.glazedlists.swing.EventSelectionModel
+import ca.odell.glazedlists.swing.TableComparatorChooser
+import ca.odell.glazedlists.swing.TreeTableSupport
+import griffon.builder.swing.factory.EventComboBoxModelFactory
+import griffon.builder.swing.factory.EventJXTableModelFactory
+import griffon.builder.swing.factory.EventListModelFactory
+import griffon.builder.swing.factory.EventTableModelFactory
+import griffon.builder.swing.factory.EventTreeModelFactory
+import griffon.builder.swing.factory.EventTreeModelUpdateFactory
 import griffon.inject.DependsOn
 import org.codehaus.griffon.runtime.groovy.view.AbstractBuilderCustomizer
 
@@ -34,20 +43,17 @@ import java.text.Format
 /**
  * @author Andres Almiray
  */
-@DependsOn('swing')
+@DependsOn('glazedlists-core')
 @Named('glazedlists-swing')
 class GlazedlistsSwingBuilderCustomizer extends AbstractBuilderCustomizer {
     GlazedlistsSwingBuilderCustomizer() {
         setFactories([
-            defaultTableFormat        : new DefaultTableFormatFactory(),
-            defaultWritableTableFormat: new DefaultWritableTableFormatFactory(),
-            defaultAdvancedTableFormat: new DefaultAdvancedTableFormatFactory(),
-            eventComboBoxModel        : new EventComboBoxModelFactory(),
-            eventListModel            : new EventListModelFactory(),
-            eventTreeModel            : new EventTreeModelFactory(),
-            afterEdit                 : new EventTreeModelUpdateFactory(),
-            eventTableModel           : new EventTableModelFactory(),
-            eventJXTableModel         : new EventJXTableModelFactory()
+            eventComboBoxModel: new EventComboBoxModelFactory(),
+            eventListModel    : new EventListModelFactory(),
+            eventTreeModel    : new EventTreeModelFactory(),
+            afterEdit         : new EventTreeModelUpdateFactory(),
+            eventTableModel   : new EventTableModelFactory(),
+            eventJXTableModel : new EventJXTableModelFactory()
         ])
 
         setMethods([
