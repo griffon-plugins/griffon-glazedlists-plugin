@@ -1,2 +1,5 @@
+griffon.builder.glazedlists
 griffon.plugins.glazedlists
-org.codehaus.griffon.runtime.swing.glazedlists
+griffon.plugins.glazedlists.gui
+org.codehaus.griffon.runtime.glazedlists
+org.codehaus.griffon.runtime.glazedlists.swing
