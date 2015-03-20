@@ -6,7 +6,7 @@ dependencies {
     compile "net.java.dev.glazedlists:glazedlists_java15:$glazedlistsVersion"
 
     testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
-    testCompile('org.spockframework:spock-core:0.7-groovy-2.0') {
+    testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
         exclude group: 'org.codehaus.groovy', module: 'groovy-all'
     }
     testCompile 'cglib:cglib-nodep:3.1'

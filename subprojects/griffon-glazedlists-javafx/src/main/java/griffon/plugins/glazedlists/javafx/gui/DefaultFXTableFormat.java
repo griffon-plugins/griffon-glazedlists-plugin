@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package griffon.plugins.glazedlists.gui;
+package griffon.plugins.glazedlists.javafx.gui;
 
-import ca.odell.glazedlists.gui.TableFormat;
 import griffon.plugins.glazedlists.ColumnReader;
+import javafx.beans.value.ObservableValue;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -30,7 +30,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author Andres Almiray
  */
-public class DefaultTableFormat<E> implements TableFormat<E> {
+public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
     private static final String ERROR_COLUMN_NAMES_NULL = "Argument 'columnNames' must not be null.";
 
     protected final String[] columnNames;
@@ -41,30 +41,66 @@ public class DefaultTableFormat<E> implements TableFormat<E> {
     private static final String TITLE = "title";
     private static final String READER = "reader";
 
-    public DefaultTableFormat(@Nonnull String[] columnNames) {
+    public DefaultFXTableFormat(@Nonnull String[] columnNames) {
         this.columnNames = requireNonNull(columnNames, ERROR_COLUMN_NAMES_NULL);
         this.columnTitles = new String[columnNames.length];
         this.columnReaders = new ColumnReader[columnNames.length];
 
         for (int i = 0; i < columnNames.length; i++) {
             columnTitles[i] = getNaturalName(columnNames[i]);
-            columnReaders[i] = ColumnReader.DEFAULT;
+            columnReaders[i] = DefaultJavaFXColumnReader.INSTANCE;
         }
     }
 
-    public DefaultTableFormat(@Nonnull String[] columnNames, @Nonnull String[] columnTitles, @Nonnull ColumnReader[] columnReaders) {
+    public DefaultFXTableFormat(@Nonnull String[] columnNames, @Nonnull String[] columnTitles, @Nonnull ColumnReader[] columnReaders) {
         this.columnNames = requireNonNull(columnNames, ERROR_COLUMN_NAMES_NULL);
-        this.columnTitles = requireNonNull(columnTitles, "Argument 'columnTitles' must not be null.");
-        this.columnReaders = requireNonNull(columnReaders, "Argument 'columnReaders' must not be null.");
+        this.columnTitles = requireNonNull(columnTitles, "Argument 'columnTitles' must not be null");
+        this.columnReaders = requireNonNull(columnReaders, "Argument 'columnReaders' must not be nul.");
+
         requireState(columnNames.length == columnTitles.length,
             "Arguments 'columNames' and 'columnTitles' have different cardinality. " + columnNames.length + " != " + columnTitles.length);
         requireState(columnNames.length == columnReaders.length,
             "Arguments 'columNames' and 'columnReaders' have different cardinality. " + columnNames.length + " != " + columnReaders.length);
     }
 
-    public DefaultTableFormat(@Nonnull List<Map<String, Object>> options) {
-        requireNonNull(options, "Argument 'options' must not be null.");
-        requireState(options.size() > 0, "Argument 'options' must have at least one entry.");
+    public DefaultFXTableFormat(@Nonnull FXTableFormat.Options... options) {
+        requireNonNull(options, "Argument 'options' must not be null");
+        requireState(options.length > 0, "Argument 'options' must have at least one entry");
+
+        this.columnNames = new String[options.length];
+        this.columnTitles = new String[options.length];
+        this.columnReaders = new ColumnReader[options.length];
+
+        int i = 0;
+        for (Options opts : options) {
+            for (Option opt : opts.options) {
+                if (NAME.equalsIgnoreCase(opt.name)) {
+                    columnNames[i] = String.valueOf(opt.value);
+                } else if (TITLE.equalsIgnoreCase(opt.name)) {
+                    columnTitles[i] = String.valueOf(opt.value);
+                } else if (READER.equalsIgnoreCase(opt.name)) {
+                    columnReaders[i] = (ColumnReader) opt.value;
+                }
+            }
+
+            if (isBlank(columnNames[i])) {
+                throw new IllegalArgumentException("Column " + i + " must have a value for name:");
+            }
+            if (isBlank(columnTitles[i])) {
+                columnTitles[i] = getNaturalName(columnNames[i]);
+            }
+            if (columnReaders[i] == null) {
+                columnReaders[i] = DefaultJavaFXColumnReader.INSTANCE;
+            }
+
+            i++;
+        }
+    }
+
+    public DefaultFXTableFormat(@Nonnull List<Map<String, Object>> options) {
+        requireNonNull(options, "Argument 'options' must not be null");
+        requireState(options.size() > 0, "Argument 'options' must have at least one entry");
+
         this.columnNames = new String[options.size()];
         this.columnTitles = new String[options.size()];
         this.columnReaders = new ColumnReader[options.size()];
@@ -87,7 +123,7 @@ public class DefaultTableFormat<E> implements TableFormat<E> {
             if (op.containsKey(READER) && op.get(READER) instanceof ColumnReader) {
                 columnReaders[i] = (ColumnReader) op.get(READER);
             } else {
-                columnReaders[i] = ColumnReader.DEFAULT;
+                columnReaders[i] = DefaultJavaFXColumnReader.INSTANCE;
             }
 
             i++;
@@ -108,5 +144,11 @@ public class DefaultTableFormat<E> implements TableFormat<E> {
     @SuppressWarnings("unchecked")
     public Object getColumnValue(E baseObject, int column) {
         return columnReaders[column].getValue(baseObject, columnNames[column], column);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public ObservableValue<?> getColumnObservableValue(E baseObject, int column) {
+        return (ObservableValue<?>) columnReaders[column].getValue(baseObject, columnNames[column], column);
     }
 }

@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package griffon.plugins.glazedlists.gui
+package griffon.plugins.glazedlists.javafx.gui
 
 import ca.odell.glazedlists.gui.TableFormat
-import griffon.plugins.glazedlists.gui.DefaultTableFormat
+//import griffon.plugins.glazedlists.gui.DefaultFXTableFormat
+import griffon.transform.FXObservable
 import spock.lang.Specification
 
-class DefaultTableFormatSpec extends Specification {
+class DefaultFXTableFormatSpec extends Specification {
     void 'Can create a TableFormat using just column names'() {
         given:
         Map props = [id: '1', name: 'Joe', lastname: 'Cool']
         Person person = new Person(props)
 
         when:
-        TableFormat<Person> format = new DefaultTableFormat<Person>(props.keySet() as String[])
+        TableFormat<Person> format = new DefaultFXTableFormat<Person>(props.keySet() as String[])
 
         then:
         format.columnCount == props.size()
@@ -44,7 +45,7 @@ class DefaultTableFormatSpec extends Specification {
         Person person = new Person(props)
 
         when:
-        TableFormat<Person> format = new DefaultTableFormat<Person>([
+        TableFormat<Person> format = new DefaultFXTableFormat<Person>([
             [name: 'id', title: 'Id'],
             [name: 'name'],
             [name: 'lastname']
@@ -65,7 +66,7 @@ class DefaultTableFormatSpec extends Specification {
         Map props = [id: '1', name: 'Joe', lastname: 'Cool']
 
         when:
-        TableFormat<Map> format = new DefaultTableFormat<Map>(props.keySet() as String[])
+        TableFormat<Map> format = new DefaultFXTableFormat<Map>(props.keySet() as String[])
 
         then:
         format.columnCount == props.size()
@@ -77,6 +78,7 @@ class DefaultTableFormatSpec extends Specification {
         }
     }
 
+    @FXObservable
     static class Person {
         String id
         String name

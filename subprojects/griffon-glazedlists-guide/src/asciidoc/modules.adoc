@@ -11,15 +11,15 @@ The following sections display all bindings per module. Use this information to
 successfully override a binding on your own modules or to troubleshoot a module
 binding if the wrong type has been applied by the Griffon runtime.
 
-== Swing
+== Core
 
-Module name: `glazedlists-swing-groovy`
+Module name: `glazedlists-core-groovy`
 
-Depends on: `swing-groovy`
+Depends on: `groovy`
 
 [source,java,options="nowrap"]
 ----
-include::{subproject-base}swing-groovy{groovy-source}{package-base}swing/glazedlists/GlazedlistsSwingGroovyModule.java[tags=bindings,indent=0]
+include::{subproject-base}core-groovy{groovy-source}{package-base}glazedlists/GlazedlistsCoreGroovyModule.java[tags=bindings,indent=0]
 ----
 
 === Nodes 
@@ -33,8 +33,7 @@ The following nodes will become available on a Groovy View
 | columns            | List<Map<String, ?>> | yes        | no         |
 | columns.name       | String               | yes        | no         | column's name
 | columns.title      | String               | no         | no         | column's title
-| columns.read       | Closure              | no         | no         | element property reader
-| read               | Closure              | no         | no         | default element property reader
+| columns.read       | ColumnReader         | no         | no         | element property reader
 |===
 
 .defaultAdvancedTableFormat
@@ -46,8 +45,7 @@ The following nodes will become available on a Groovy View
 | columns.title      | String               | no         | no         | column's title
 | columns.class      | Class                | no         | no         | column's class
 | columns.comparator | Comparator           | no         | no         | column's comparator
-| columns.read       | Closure              | no         | no         | element property reader
-| read               | Closure              | no         | no         | default element property reader
+| columns.read       | ColumnReader         | no         | no         | element property reader
 |===
 
 .defaultWritableTableFormat
@@ -59,13 +57,42 @@ The following nodes will become available on a Groovy View
 | columns.title      | String               | no         | no         | column's title
 | columns.class      | Class                | no         | no         | column's class
 | columns.comparator | Comparator           | no         | no         | column's comparator
-| columns.read       | Closure              | no         | no         | element property reader
-| columns.write      | Closure              | no         | no         | element property writer
-| columns.editable   | Closure              | no         | no         | is this column editable?
-| read               | Closure              | no         | no         | default element property reader
-| write              | Closure              | no         | no         | default element property writer
-| editable           | Closure              | no         | no         | default editable state evaluator
+| columns.read       | ColumnReader         | no         | no         | element property reader
+| columns.write      | ColumnWriter         | no         | no         | element property writer
+| columns.editable   | ColumnEdit           | no         | no         | is this column editable?
 |===
+
+=== MetaProgramming
+
+The following classes have been enhanced using the {link_groovy_module_extension} feature of Groovy 2.0
+
+*ca.odell.glazedlists.util.concurrent.Lock*
+
+ * *withLock(Closure)* - this method executes the closure in the context of Lock, by acquiring and releasing
+   the lock around the execution; like this
+
+[source,groovy]
+----
+lock.lock()
+try { closure() }
+finally { lock.unlock() }
+----
+
+*ca.odell.glazedlists.EventList*
+
+ * *withReadLock(Closure)* - builds on top of `Lock.withLock`, decorating the List's ReadLock.
+ * *withWriteLock(Closure)* - builds on top of `Lock.withLock`, decorating the List's WriteLock.
+
+== Swing
+
+Module name: `glazedlists-swing-groovy`
+
+Depends on: `swing-groovy`
+
+[source,java,options="nowrap"]
+----
+include::{subproject-base}swing-groovy{groovy-source}{package-base}glazedlists/swing/GlazedlistsSwingGroovyModule.java[tags=bindings,indent=0]
+----
 
 .eventComboBoxModel
 [options="5*,header"]
@@ -165,24 +192,48 @@ The following methods become available as well
 | multiple | boolean    | false
 |===
 
-=== MetaProgramming 
+== JavaFX
 
-The following classes have been enhanced using the {link_groovy_module_extension} feature of Groovy 2.0
+Module name: `glazedlists-javafx-groovy`
 
-*ca.odell.glazedlists.util.concurrent.Lock*
+Depends on: `javafx-groovy`
 
- * *withLock(Closure)* - this method executes the closure in the context of Lock, by acquiring and releasing
-   the lock around the execution; like this
-
-[source,groovy]
+[source,java,options="nowrap"]
 ----
-lock.lock()
-try { closure() }
-finally { lock.unlock() }
+include::{subproject-base}javafx-groovy{groovy-source}{package-base}glazedlists/javafx/GlazedlistsJavaFXGroovyModule.java[tags=bindings,indent=0]
 ----
 
-*ca.odell.glazedlists.EventList*
+.fxTableFormat
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| columnNames        | List                 | yes        | no         |
+| columns            | List<Map<String, ?>> | yes        | no         |
+| columns.name       | String               | yes        | no         | column's name
+| columns.title      | String               | no         | no         | column's title
+| columns.read       | ColumnReader         | no         | no         | element property reader
+|===
 
- * *withReadLock(Closure)* - builds on top of `Lock.withLock`, decorating the List's ReadLock.
- * *withWriteLock(Closure)* - builds on top of `Lock.withLock`, decorating the List's WriteLock.
+.fxWritableTableFormat
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| columns            | List<Map<String, ?>> | yes        | no         |
+| columns.name       | String               | yes        | no         | column's name
+| columns.title      | String               | no         | no         | column's title
+| columns.read       | ColumnReader         | no         | no         | element property reader
+| columns.write      | ColumnWriter         | no         | no         | element property writer
+| columns.editable   | ColumnEdit           | no         | no         | is this column editable?
+|===
+
+.eventTableViewModel
+[options="5*,header"]
+|===
+| Property           | Type                 | Required   | Bindable   | Notes
+| source             | EventList            | yes        | no         |
+| format             | TableFormat          | yes        | no         |
+| wrap               | boolean              | no         | no         | wrap source with Thread safe proxy
+|===
+
+The `wrap:` property in `eventTableViewModel` defaults to `true`.
 

@@ -41,8 +41,8 @@ public class DefaultAdvancedTableFormat<E> extends DefaultTableFormat<E> impleme
         }
     };
 
-    private static String CLASS = "class";
-    private static String COMPARATOR = "comparator";
+    private static final String CLASS = "class";
+    private static final String COMPARATOR = "comparator";
 
     private final Class[] columnClasses;
     private final Comparator[] columnComparators;

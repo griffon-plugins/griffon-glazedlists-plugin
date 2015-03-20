@@ -1,0 +1,26 @@
+apply plugin: 'groovy'
+
+apply from: rootProject.file('gradle/code-coverage.gradle')
+apply from: rootProject.file('gradle/javafx.gradle')
+
+dependencies {
+    compileOnly project.files(project.jfxrtLocation)
+
+    compile project(':griffon-glazedlists-core')
+
+    testCompileOnly project.files(project.jfxrtLocation)
+    testCompileOnly "org.codehaus.griffon:griffon-groovy-compile:${griffonVersion}"
+
+    testCompile "org.codehaus.groovy:groovy-all:$groovyVersion"
+    testCompile('org.spockframework:spock-core:1.0-groovy-2.4') {
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
+    testCompile 'cglib:cglib-nodep:3.1'
+
+    testRuntime project.files(project.jfxrtLocation)
+    testRuntime "org.codehaus.griffon:griffon-guice:${griffonVersion}"
+    testRuntime "org.codehaus.griffon:griffon-groovy:${griffonVersion}"
+    testRuntime 'org.slf4j:slf4j-simple:1.7.10'
+}
+
+compileGroovy.enabled = false

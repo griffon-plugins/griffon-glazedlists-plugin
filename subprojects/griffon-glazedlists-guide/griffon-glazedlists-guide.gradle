@@ -16,10 +16,10 @@ apply plugin: 'com.bmuschko.java2html'
 
 ext.childProjects = [
     ':griffon-glazedlists-core',
-//    ':griffon-glazedlists-javafx',
+    ':griffon-glazedlists-javafx',
     ':griffon-glazedlists-core-groovy',
-    ':griffon-glazedlists-swing-groovy'
-//    ':griffon-glazedlists-javafx-groovy'
+    ':griffon-glazedlists-swing-groovy',
+    ':griffon-glazedlists-javafx-groovy'
 ]
 
 

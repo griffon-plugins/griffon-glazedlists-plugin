@@ -30,8 +30,8 @@ public class DefaultWritableTableFormat<E> extends DefaultAdvancedTableFormat<E>
     protected final ColumnWriter[] columnWriters;
     protected final ColumnEdit[] columnEdits;
 
-    private static String WRITER = "writer";
-    private static String EDITABLE = "editable";
+    private static final String WRITER = "writer";
+    private static final String EDITABLE = "editable";
 
     public DefaultWritableTableFormat(@Nonnull List<Map<String, Object>> options) {
         super(options);

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.codehaus.griffon.runtime.glazedlists.swing;
+package org.codehaus.griffon.runtime.glazedlists.javafx;
 
-import griffon.builder.swing.GlazedlistsSwingBuilderCustomizer;
+import griffon.builder.javafx.GlazedlistsJavaFXBuilderCustomizer;
 import griffon.core.injection.Module;
 import griffon.inject.DependsOn;
 import griffon.util.BuilderCustomizer;
@@ -27,15 +27,15 @@ import javax.inject.Named;
 /**
  * @author Andres Almiray
  */
-@DependsOn("swing-groovy")
-@Named("glazedlists-swing-groovy")
+@DependsOn("javafx-groovy")
+@Named("glazedlists-javafx-groovy")
 @ServiceProviderFor(Module.class)
-public class GlazedlistsSwingGroovyModule extends AbstractModule {
+public class GlazedlistsJavaFXGroovyModule extends AbstractModule {
     @Override
     protected void doConfigure() {
         // tag::bindings[]
         bind(BuilderCustomizer.class)
-            .to(GlazedlistsSwingBuilderCustomizer.class)
+            .to(GlazedlistsJavaFXBuilderCustomizer.class)
             .asSingleton();
         // end::bindings[]
     }

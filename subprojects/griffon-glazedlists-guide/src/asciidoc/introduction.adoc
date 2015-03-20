@@ -4,3 +4,5 @@
 
 {link_glazedlists} - List transformations in Java.
 
+Griffon version: {griffon-version}
+
