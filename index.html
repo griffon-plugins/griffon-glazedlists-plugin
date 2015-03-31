@@ -16,12 +16,21 @@
 <h1>Griffon Glazedlists Plugin</h1>
 <div class="details">
 <span id="author" class="author">Andres Almiray</span><br>
-<span id="revnumber">version 1.1.0</span>
+<span id="revnumber">version 1.2.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_introduction">1. Introduction</a></li>
+<li><a href="#_introduction">1. Introduction</a>
+<ul class="sectlevel2">
+<li><a href="#_javafx_support">1.1. JavaFX Support</a>
+<ul class="sectlevel3">
+<li><a href="#_eventlist_as_observablelist">1.1.1. EventList as ObservableList</a></li>
+<li><a href="#_tableviewmodel">1.1.2. TableViewModel</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#_configuration">2. Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_gradle">2.1. Gradle</a>
@@ -38,14 +47,15 @@
 <li><a href="#_core">3.1. Core</a>
 <ul class="sectlevel3">
 <li><a href="#_nodes">3.1.1. Nodes</a></li>
+<li><a href="#_metaprogramming">3.1.2. MetaProgramming</a></li>
 </ul>
 </li>
 <li><a href="#_swing">3.2. Swing</a>
 <ul class="sectlevel3">
 <li><a href="#_methods">3.2.1. Methods</a></li>
-<li><a href="#_metaprogramming">3.2.2. MetaProgramming</a></li>
 </ul>
 </li>
+<li><a href="#_javafx">3.3. JavaFX</a></li>
 </ul>
 </li>
 <li><a href="#_links">4. Links</a></li>
@@ -61,6 +71,232 @@
 </div>
 <div class="paragraph">
 <p>Griffon version: 2.2.0</p>
+</div>
+<div class="sect2">
+<h3 id="_javafx_support"><a class="anchor" href="#_javafx_support"></a>1.1. JavaFX Support</h3>
+<div class="sect3">
+<h4 id="_eventlist_as_observablelist"><a class="anchor" href="#_eventlist_as_observablelist"></a>1.1.1. EventList as ObservableList</h4>
+<div class="paragraph">
+<p>An <code><a href="https://svn.java.net/svn/glazedlists~svn/tags/glazedlists-1_9_0/www/api/ca/odell/glazedlists/EventList.html" target="_blank">EventList</a></code> can be used as source where an <code><a href="http://docs.oracle.com/javase/8/javafx/api/javafx/collections/ObservableList.html" target="_blank">ObservableList</a></code> is expected as long as it&#8217;s wrapped
+with a <code><a href="api/griffon/plugins/glazedlists/javafx/EventObservableList.html" target="_blank">EventObservableList</a></code>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Remember to call <code>dispose()</code> on the <code><a href="api/griffon/plugins/glazedlists/javafx/EventObservableList.html" target="_blank">EventObservableList</a></code> when it&#8217;s no longer needed.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This bridge class allows you to build a full GlazedLists pipeline, adapting it to be consumed by widgets such as
+<code>ListView</code> and <code>TableView</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_tableviewmodel"><a class="anchor" href="#_tableviewmodel"></a>1.1.2. TableViewModel</h4>
+<div class="paragraph">
+<p>JavaFX widgets do not follow the same MVC approach as Swing components; this means advanced widgets such as <code>TableView</code>
+do not offer a <code>model</code> class, rather they consume an <code>ObservableList</code> directly, relying on helper classes such as
+<code>TableColumn</code> to customize the view and behavior of cells.</p>
+</div>
+<div class="paragraph">
+<p>GlazedLists has excellent support for transforming an <code>EventList</code> into a Swing <code>TableModel</code> and we believe this feature
+should be made available to JavaFX too. This is why this plugin delivers the following model classes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code><a href="api/griffon/plugins/glazedlists/javafx/models/TableViewModel.html" target="_blank">TableViewModel</a></code></p>
+</li>
+<li>
+<p><code><a href="api/griffon/plugins/glazedlists/javafx/models/FXTableViewModel.html" target="_blank">FXTableViewModel</a></code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The former model works with implementations of the standard <code><a href="https://svn.java.net/svn/glazedlists~svn/tags/glazedlists-1_9_0/www/api/ca/odell/glazedlists/gui/TableFormat.html" target="_blank">TableFormat</a></code> while the latter works with the more
+JavaFX friendly <code><a href="api/griffon/plugins/glazedlists/javafx/gui/FXTableFormat.html" target="_blank">FXTableFormat</a></code>. The difference between formats is that the standard works with any kind of POJO
+while the other one is aware of JavaFX observable values.</p>
+</div>
+<div class="paragraph">
+<p>The following example shows a simple GlazedLists pipeline. The <code>Person</code> class is supposed to be a non-observable domain
+object. The <code>ObservablePerson</code> class wraps the domain as an observable. The pipeline is assembled in such a way that
+changes made to the observable beans inside an editable <code>TableView</code> are propagated and immediately visible in the <code>ListView</code>
+that consumes the same <code>ObservableList</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight nowrap"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">griffon.plugins.glazedlists.javafx</span>;
+
+<span class="keyword">import</span> <span class="include">ca.odell.glazedlists.EventList</span>;
+<span class="keyword">import</span> <span class="include">ca.odell.glazedlists.GlazedLists</span>;
+<span class="keyword">import</span> <span class="include">ca.odell.glazedlists.ObservableElementList</span>;
+<span class="keyword">import</span> <span class="include">griffon.plugins.glazedlists.javafx.gui.DefaultFXWritableTableFormat</span>;
+<span class="keyword">import</span> <span class="include">griffon.plugins.glazedlists.javafx.gui.FXTableFormat</span>;
+<span class="keyword">import</span> <span class="include">griffon.plugins.glazedlists.javafx.models.FXTableViewModel</span>;
+<span class="keyword">import</span> <span class="include">javafx.application.Application</span>;
+<span class="keyword">import</span> <span class="include">javafx.beans.property.Property</span>;
+<span class="keyword">import</span> <span class="include">javafx.beans.property.SimpleStringProperty</span>;
+<span class="keyword">import</span> <span class="include">javafx.beans.property.StringProperty</span>;
+<span class="keyword">import</span> <span class="include">javafx.collections.FXCollections</span>;
+<span class="keyword">import</span> <span class="include">javafx.collections.ObservableList</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.Scene</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.control.ListView</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.control.TableView</span>;
+<span class="keyword">import</span> <span class="include">javafx.scene.layout.GridPane</span>;
+<span class="keyword">import</span> <span class="include">javafx.stage.Stage</span>;
+
+<span class="keyword">import</span> <span class="include">javax.annotation.Nonnull</span>;
+<span class="keyword">import</span> <span class="include">java.util.stream.Collectors</span>;
+
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">griffon.plugins.glazedlists.javafx.GlazedListsJavaFX.eventTableViewModel</span>;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">griffon.plugins.glazedlists.javafx.GlazedListsJavaFX.propertyContainerConnector</span>;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">griffon.plugins.glazedlists.javafx.gui.FXTableFormat.option</span>;
+<span class="keyword">import</span> <span class="include">static</span> <span class="include">griffon.plugins.glazedlists.javafx.gui.FXTableFormat.options</span>;
+
+<span class="directive">public</span> <span class="type">class</span> <span class="class">GlazedListsFXSample</span> <span class="directive">extends</span> Application {
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) <span class="directive">throws</span> <span class="exception">Exception</span> {
+        launch(args);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> start(Stage stage) <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="comment">// non-observable beans</span>
+        ObservableList&lt;Person&gt; people = FXCollections.observableArrayList(
+            <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Jamie</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Hyneman</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Adam</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Savage</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Tory</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Belleci</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Kari</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Byron</span><span class="delimiter">&quot;</span></span>),
+            <span class="keyword">new</span> Person(<span class="string"><span class="delimiter">&quot;</span><span class="content">Grant</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Imahara</span><span class="delimiter">&quot;</span></span>)
+        );
+
+        <span class="comment">// observable beans</span>
+        EventList&lt;ObservablePerson&gt; evenList = GlazedLists.eventList(
+            people.stream().map(ObservablePerson::<span class="keyword">new</span>).collect(Collectors.&lt;ObservablePerson&gt;toList())
+        );
+
+        <span class="comment">// a list that reacts to element updates</span>
+        EventList&lt;ObservablePerson&gt; op = <span class="keyword">new</span> ObservableElementList&lt;&gt;(evenList, propertyContainerConnector());
+        <span class="comment">// bridge between EventList and ObservableList</span>
+        ObservableList&lt;ObservablePerson&gt; observablePeople = <span class="keyword">new</span> EventObservableList&lt;&gt;(op);
+
+        <span class="comment">// define format options</span>
+        FXTableFormat&lt;ObservablePerson&gt; tableFormat = <span class="keyword">new</span> DefaultFXWritableTableFormat&lt;&gt;(
+            options(option(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>), option(<span class="string"><span class="delimiter">&quot;</span><span class="content">editable</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>)),
+            options(option(<span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span>), option(<span class="string"><span class="delimiter">&quot;</span><span class="content">editable</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>))
+        );
+
+        <span class="comment">// table model backed by an ObservableList &amp; TableFormat</span>
+        FXTableViewModel&lt;ObservablePerson&gt; tableModel = eventTableViewModel(observablePeople, tableFormat);
+        <span class="comment">// create the table</span>
+        <span class="predefined-type">TableView</span>&lt;ObservablePerson&gt; tableView = <span class="keyword">new</span> <span class="predefined-type">TableView</span>&lt;&gt;();
+        <span class="comment">// attach the model to the table</span>
+        tableModel.attachTo(tableView);
+
+        tableView.setEditable(<span class="predefined-constant">true</span>);
+
+        <span class="comment">// watch edits on tbale being pushed to list</span>
+        <span class="predefined-type">ListView</span>&lt;ObservablePerson&gt; listView = <span class="keyword">new</span> <span class="predefined-type">ListView</span>&lt;&gt;();
+        listView.setItems(observablePeople);
+
+        <span class="comment">// put everything in a Grid</span>
+        GridPane grid = <span class="keyword">new</span> GridPane();
+        grid.add(tableView, <span class="integer">0</span>, <span class="integer">0</span>);
+        grid.add(listView, <span class="integer">1</span>, <span class="integer">0</span>);
+
+        <span class="comment">// show it</span>
+        Scene scene = <span class="keyword">new</span> Scene(grid);
+        stage.setTitle(<span class="string"><span class="delimiter">&quot;</span><span class="content">MythBusters</span><span class="delimiter">&quot;</span></span>);
+        stage.setScene(scene);
+        stage.sizeToScene();
+        stage.show();
+    }
+
+    <span class="comment">// non-observable bean</span>
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">Person</span> {
+        <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> name;
+        <span class="directive">private</span> <span class="directive">final</span> <span class="predefined-type">String</span> lastname;
+
+        <span class="directive">public</span> Person(<span class="predefined-type">String</span> name, <span class="predefined-type">String</span> lastname) {
+            <span class="local-variable">this</span>.name = name;
+            <span class="local-variable">this</span>.lastname = lastname;
+        }
+
+        <span class="directive">public</span> <span class="predefined-type">String</span> getName() {
+            <span class="keyword">return</span> name;
+        }
+
+        <span class="directive">public</span> <span class="predefined-type">String</span> getLastname() {
+            <span class="keyword">return</span> lastname;
+        }
+    }
+
+    <span class="comment">// observable bean</span>
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">ObservablePerson</span> <span class="directive">implements</span> PropertyContainer {
+        <span class="directive">private</span> StringProperty name;
+        <span class="directive">private</span> StringProperty lastname;
+
+        <span class="directive">public</span> ObservablePerson(Person person) {
+            <span class="local-variable">this</span>(person.getName(), person.getLastname());
+        }
+
+        <span class="directive">public</span> ObservablePerson(<span class="predefined-type">String</span> name, <span class="predefined-type">String</span> lastname) {
+            setName(name);
+            setLastname(lastname);
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="annotation">@Nonnull</span>
+        <span class="directive">public</span> Property&lt;?&gt;<span class="type">[]</span> properties() {
+            <span class="keyword">return</span> <span class="keyword">new</span> Property&lt;?&gt;<span class="type">[]</span>{
+                nameProperty(), lastnameProperty()
+            };
+        }
+
+        <span class="directive">public</span> StringProperty nameProperty() {
+            <span class="keyword">if</span> (name == <span class="predefined-constant">null</span>) {
+                name = <span class="keyword">new</span> SimpleStringProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">name</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+            }
+            <span class="keyword">return</span> name;
+        }
+
+        <span class="directive">public</span> StringProperty lastnameProperty() {
+            <span class="keyword">if</span> (lastname == <span class="predefined-constant">null</span>) {
+                lastname = <span class="keyword">new</span> SimpleStringProperty(<span class="local-variable">this</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">lastname</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>);
+            }
+            <span class="keyword">return</span> lastname;
+        }
+
+        <span class="directive">public</span> <span class="predefined-type">String</span> getName() {
+            <span class="keyword">return</span> nameProperty().get();
+        }
+
+        <span class="directive">public</span> <span class="predefined-type">String</span> getLastname() {
+            <span class="keyword">return</span> lastnameProperty().get();
+        }
+
+        <span class="directive">public</span> <span class="type">void</span> setName(<span class="predefined-type">String</span> name) {
+            nameProperty().set(name);
+        }
+
+        <span class="directive">public</span> <span class="type">void</span> setLastname(<span class="predefined-type">String</span> lastname) {
+            lastnameProperty().set(lastname);
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="directive">public</span> <span class="predefined-type">String</span> toString() {
+            <span class="keyword">return</span> name.get() + <span class="string"><span class="delimiter">&quot;</span><span class="content"> </span><span class="delimiter">&quot;</span></span> + lastname.get();
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -85,7 +321,7 @@ may include the following snippet in <code>build.gradle</code></p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
-    griffon 'org.codehaus.griffon.plugins:griffon-glazedlists-plugin:1.1.0'
+    griffon 'org.codehaus.griffon.plugins:griffon-glazedlists-plugin:1.2.0'
 }</code></pre>
 </div>
 </div>
@@ -102,7 +338,7 @@ may include the following snippet in <code>build.gradle</code></p>
 <div class="title">Java + Swing</div>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
-    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing:1.1.0'
+    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing:1.2.0'
 }</code></pre>
 </div>
 </div>
@@ -110,7 +346,7 @@ may include the following snippet in <code>build.gradle</code></p>
 <div class="title">Groovy + Swing</div>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="groovy">dependencies {
-    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing-groovy:1.1.0'
+    compile 'org.codehaus.griffon.plugins:griffon-glazedlists-swing-groovy:1.2.0'
 }</code></pre>
 </div>
 </div>
@@ -129,7 +365,7 @@ snippet before the <code>&lt;build&gt;</code> element</p>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.codehaus.griffon.plugins<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>griffon-glazedlists-plugin<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;version&gt;</span>1.1.0<span class="tag">&lt;/version&gt;</span>
+            <span class="tag">&lt;version&gt;</span>1.2.0<span class="tag">&lt;/version&gt;</span>
             <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
             <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
@@ -175,7 +411,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 <p>Module name: <code>glazedlists-core-groovy</code></p>
 </div>
 <div class="paragraph">
-<p>Depends on: <code>swing-groovy</code></p>
+<p>Depends on: <code>groovy</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -238,17 +474,10 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">columns.read</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnReader</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">element property reader</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">read</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">default element property reader</p></td>
 </tr>
 </tbody>
 </table>
@@ -308,17 +537,10 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">columns.read</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnReader</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">element property reader</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">read</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">default element property reader</p></td>
 </tr>
 </tbody>
 </table>
@@ -378,48 +600,64 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">columns.read</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnReader</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">element property reader</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">columns.write</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnWriter</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">element property writer</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">columns.editable</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnEdit</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">is this column editable?</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">read</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">default element property reader</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">write</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">default element property writer</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">editable</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Closure</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">default editable state evaluator</p></td>
-</tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_metaprogramming"><a class="anchor" href="#_metaprogramming"></a>3.1.2. MetaProgramming</h4>
+<div class="paragraph">
+<p>The following classes have been enhanced using the <a href="http://groovy.codehaus.org/Creating+an+extension+module" target="_blank">Groovy Module Extension</a> feature of Groovy 2.0</p>
+</div>
+<div class="paragraph">
+<p><strong>ca.odell.glazedlists.util.concurrent.Lock</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>withLock(Closure)</strong> - this method executes the closure in the context of Lock, by acquiring and releasing
+the lock around the execution; like this</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">lock.lock()
+<span class="keyword">try</span> { closure() }
+<span class="keyword">finally</span> { lock.unlock() }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>ca.odell.glazedlists.EventList</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>withReadLock(Closure)</strong> - builds on top of <code>Lock.withLock</code>, decorating the List&#8217;s ReadLock.</p>
+</li>
+<li>
+<p><strong>withWriteLock(Closure)</strong> - builds on top of <code>Lock.withLock</code>, decorating the List&#8217;s WriteLock.</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -428,7 +666,7 @@ binding if the wrong type has been applied by the Griffon runtime.</p>
 <p>Module name: <code>glazedlists-swing-groovy</code></p>
 </div>
 <div class="paragraph">
-<p>Depends on: <code>glazedlists-core</code></p>
+<p>Depends on: <code>swing-groovy</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -797,42 +1035,185 @@ defaults to <code>true</code>.</p>
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_metaprogramming"><a class="anchor" href="#_metaprogramming"></a>3.2.2. MetaProgramming</h4>
+</div>
+<div class="sect2">
+<h3 id="_javafx"><a class="anchor" href="#_javafx"></a>3.3. JavaFX</h3>
 <div class="paragraph">
-<p>The following classes have been enhanced using the <a href="http://groovy.codehaus.org/Creating+an+extension+module" target="_blank">Groovy Module Extension</a> feature of Groovy 2.0</p>
+<p>Module name: <code>glazedlists-javafx-groovy</code></p>
 </div>
 <div class="paragraph">
-<p><strong>ca.odell.glazedlists.util.concurrent.Lock</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>withLock(Closure)</strong> - this method executes the closure in the context of Lock, by acquiring and releasing
-the lock around the execution; like this</p>
-</li>
-</ul>
+<p>Depends on: <code>javafx-groovy</code></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">lock.lock()
-<span class="keyword">try</span> { closure() }
-<span class="keyword">finally</span> { lock.unlock() }</code></pre>
+<pre class="CodeRay highlight nowrap"><code data-lang="java">bind(BuilderCustomizer.class)
+    .to(GlazedlistsJavaFXBuilderCustomizer.class)
+    .asSingleton();</code></pre>
 </div>
 </div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 9. fxTableFormat</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Bindable</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columnNames</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List&lt;Map&lt;String, ?&gt;&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">column&#8217;s name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">column&#8217;s title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.read</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnReader</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">element property reader</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 10. fxWritableTableFormat</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Bindable</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List&lt;Map&lt;String, ?&gt;&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">column&#8217;s name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">column&#8217;s title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.read</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnReader</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">element property reader</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.write</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnWriter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">element property writer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">columns.editable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ColumnEdit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">is this column editable?</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 11. eventTableViewModel</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Bindable</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">source</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EventList</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">format</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TableFormat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wrap</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wrap source with Thread safe proxy</p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p><strong>ca.odell.glazedlists.EventList</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>withReadLock(Closure)</strong> - builds on top of <code>Lock.withLock</code>, decorating the List&#8217;s ReadLock.</p>
-</li>
-<li>
-<p><strong>withWriteLock(Closure)</strong> - builds on top of <code>Lock.withLock</code>, decorating the List&#8217;s WriteLock.</p>
-</li>
-</ul>
-</div>
+<p>The <code>wrap:</code> property in <code>eventTableViewModel</code> defaults to <code>true</code>.</p>
 </div>
 </div>
 </div>
@@ -851,7 +1232,7 @@ the lock around the execution; like this</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.1.0<br>
+Version 1.2.0<br>
 Last updated 2014-12-18 23:38:57 CET
 </div>
 </div>
