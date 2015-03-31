@@ -28,6 +28,8 @@ import static griffon.util.GriffonNameUtils.isBlank;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Defines a read-only {@code FXTableFormat}.
+ *
  * @author Andres Almiray
  */
 public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
@@ -63,6 +65,14 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
             "Arguments 'columNames' and 'columnReaders' have different cardinality. " + columnNames.length + " != " + columnReaders.length);
     }
 
+    /**
+     * Creates a {@code FXTableFormat} based on the supplied options.
+     * <p>
+     * Valid option keys are <tt>name</tt>, <tt>title</tt> and <tt>reader</tt>.
+     * </p>
+     *
+     * @param options the options that configure this format
+     */
     public DefaultFXTableFormat(@Nonnull FXTableFormat.Options... options) {
         requireNonNull(options, "Argument 'options' must not be null");
         requireState(options.length > 0, "Argument 'options' must have at least one entry");
@@ -97,6 +107,14 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
         }
     }
 
+    /**
+     * Creates a {@code FXTableFormat} based on the supplied options.
+     * <p>
+     * Valid option keys are <tt>name</tt>, <tt>title</tt> and <tt>reader</tt>.
+     * </p>
+     *
+     * @param options the options that configure this format
+     */
     public DefaultFXTableFormat(@Nonnull List<Map<String, Object>> options) {
         requireNonNull(options, "Argument 'options' must not be null");
         requireState(options.size() > 0, "Argument 'options' must have at least one entry");

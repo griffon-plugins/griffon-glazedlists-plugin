@@ -16,7 +16,7 @@ dependencies {
     compileOnly "org.codehaus.griffon:griffon-core-compile:${griffonVersion}"
 
     compile project(':griffon-glazedlists-core')
-    compile "org.codehaus.griffon:griffon-swing-groovy:${griffonVersion}"
+    compile "org.codehaus.griffon:griffon-groovy:${griffonVersion}"
 
     testCompile "org.codehaus.griffon:griffon-core-test:$griffonVersion"
 

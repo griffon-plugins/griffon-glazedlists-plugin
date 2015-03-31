@@ -6,3 +6,40 @@
 
 Griffon version: {griffon-version}
 
+== JavaFX Support
+
+=== EventList as ObservableList
+
+An `{link_event_list}` can be used as source where an `{link_observable_list}` is expected as long as it's wrapped
+with a `{api_event_observable_list}`.
+
+WARNING: Remember to call `dispose()` on the `{api_event_observable_list}` when it's no longer needed.
+
+This bridge class allows you to build a full GlazedLists pipeline, adapting it to be consumed by widgets such as
+`ListView` and `TableView`.
+
+=== TableViewModel
+
+JavaFX widgets do not follow the same MVC approach as Swing components; this means advanced widgets such as `TableView`
+do not offer a `model` class, rather they consume an `ObservableList` directly, relying on helper classes such as
+`TableColumn` to customize the view and behavior of cells.
+
+GlazedLists has excellent support for transforming an `EventList` into a Swing `TableModel` and we believe this feature
+should be made available to JavaFX too. This is why this plugin delivers the following model classes:
+
+ * `{api_table_view_model}`
+ * `{api_fx_table_view_model}`
+
+The former model works with implementations of the standard `{link_table_format}` while the latter works with the more
+JavaFX friendly `{api_fx_table_format}`. The difference between formats is that the standard works with any kind of POJO
+while the other one is aware of JavaFX observable values.
+
+The following example shows a simple GlazedLists pipeline. The `Person` class is supposed to be a non-observable domain
+object. The `ObservablePerson` class wraps the domain as an observable. The pipeline is assembled in such a way that
+changes made to the observable beans inside an editable `TableView` are propagated and immediately visible in the `ListView`
+that consumes the same `ObservableList`.
+
+[source,java,options="nowrap"]
+----
+include::{subproject-base}javafx{test-source}griffon/plugins/glazedlists/javafx/GlazedListsFXSample.java[lines=16..-1,indent=0]
+----

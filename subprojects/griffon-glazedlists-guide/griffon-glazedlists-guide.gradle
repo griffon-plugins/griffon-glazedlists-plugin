@@ -22,7 +22,6 @@ ext.childProjects = [
     ':griffon-glazedlists-javafx-groovy'
 ]
 
-
 ext.childProjects.each { evaluationDependsOn it }
 
 dependencies {

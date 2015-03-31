@@ -1,3 +1,17 @@
 
 :link_glazedlists: link:http://www.glazedlists.com/[GlazedLists, window="_blank"]
 :link_groovy_module_extension: link:http://groovy.codehaus.org/Creating+an+extension+module[Groovy Module Extension, window="_blank"]
+:link_event_list: link:https://svn.java.net/svn/glazedlists~svn/tags/glazedlists-1_9_0/www/api/ca/odell/glazedlists/EventList.html[EventList, window="_blank"]
+:link_table_format: link:https://svn.java.net/svn/glazedlists~svn/tags/glazedlists-1_9_0/www/api/ca/odell/glazedlists/gui/TableFormat.html[TableFormat, window="_blank"]
+:link_observable_list: link:http://docs.oracle.com/javase/8/javafx/api/javafx/collections/ObservableList.html[ObservableList, window="_blank"]
+:api_event_observable_list: link:api/griffon/plugins/glazedlists/javafx/EventObservableList.html[EventObservableList, window="_blank"]
+:api_fx_table_format: link:api/griffon/plugins/glazedlists/javafx/gui/FXTableFormat.html[FXTableFormat, window="_blank"]
+:api_fx_writable_table_format: link:api/griffon/plugins/glazedlists/javafx/gui/FXWritableTableFormat.html[FXWritableTableFormat, window="_blank"]
+:api_table_view_model: link:api/griffon/plugins/glazedlists/javafx/models/TableViewModel.html[TableViewModel, window="_blank"]
+:api_fx_table_view_model: link:api/griffon/plugins/glazedlists/javafx/models/FXTableViewModel.html[FXTableViewModel, window="_blank"]
+
+:subproject-base: {rootdir}/subprojects/griffon-glazedlists-
+:java-source: /src/main/java/
+:test-source: /src/test/java/
+:groovy-source: /src/main/groovy/
+:package-base: org/codehaus/griffon/runtime/

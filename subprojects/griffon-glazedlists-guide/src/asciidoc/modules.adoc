@@ -1,10 +1,6 @@
 
 [[_modules]]
 = Modules
-:subproject-base: {rootdir}/subprojects/griffon-glazedlists-
-:java-source: /src/main/java/
-:groovy-source: /src/main/groovy/
-:package-base: org/codehaus/griffon/runtime/
 :numbered:
 
 The following sections display all bindings per module. Use this information to

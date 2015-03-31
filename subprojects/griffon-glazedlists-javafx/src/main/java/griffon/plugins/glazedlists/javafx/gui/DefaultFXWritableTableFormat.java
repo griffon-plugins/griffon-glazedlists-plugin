@@ -26,6 +26,8 @@ import static griffon.util.GriffonClassUtils.requireState;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Defines an editable {@code FXTableFormat}.
+ *
  * @author Andres Almiray
  */
 public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> implements FXWritableTableFormat<E> {
@@ -37,6 +39,15 @@ public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> imp
     private static final String EDITABLE = "editable";
     private static final String TABLE_CELL_FACTORY = "tableCellFactory";
 
+    /**
+     * Creates a {@code FXTableFormat} based on the supplied options.
+     * <p>
+     * Valid option keys are <tt>name</tt>, <tt>title</tt>, <tt>reader</tt>,
+     * <tt>writer</tt>, <tt>editable</tt> and <tt>tableCellFactory</tt>.
+     * </p>
+     *
+     * @param options the options that configure this format
+     */
     public DefaultFXWritableTableFormat(@Nonnull FXTableFormat.Options... options) {
         super(options);
 
@@ -75,6 +86,15 @@ public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> imp
         }
     }
 
+    /**
+     * Creates a {@code FXTableFormat} based on the supplied options.
+     * <p>
+     * Valid option keys are <tt>name</tt>, <tt>title</tt>, <tt>reader</tt>,
+     * <tt>writer</tt>, <tt>editable</tt> and <tt>tableCellFactory</tt>.
+     * </p>
+     *
+     * @param options the options that configure this format
+     */
     public DefaultFXWritableTableFormat(@Nonnull List<Map<String, Object>> options) {
         super(options);
 
