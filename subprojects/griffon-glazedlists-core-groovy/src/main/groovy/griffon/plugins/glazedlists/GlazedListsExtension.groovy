@@ -30,7 +30,7 @@ class GlazedListsExtension {
         withLockHandler(self.readWriteLock.readLock(), closure)
     }
 
-    static Object withWriteLock(Lock self, Closure closure) {
+    static Object withWriteLock(EventList self, Closure closure) {
         withLockHandler(self.readWriteLock.writeLock(), closure)
     }
 
