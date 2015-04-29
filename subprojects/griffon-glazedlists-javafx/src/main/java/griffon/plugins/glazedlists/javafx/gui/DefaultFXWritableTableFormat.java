@@ -33,11 +33,9 @@ import static java.util.Objects.requireNonNull;
 public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> implements FXWritableTableFormat<E> {
     protected final ColumnWriter[] columnWriters;
     protected final ColumnEdit[] columnEdits;
-    protected final TableCellFactory[] tableCellFactories;
 
     private static final String WRITER = "writer";
     private static final String EDITABLE = "editable";
-    private static final String TABLE_CELL_FACTORY = "tableCellFactory";
 
     /**
      * Creates a {@code FXTableFormat} based on the supplied options.
@@ -56,7 +54,6 @@ public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> imp
 
         this.columnWriters = new ColumnWriter[options.length];
         this.columnEdits = new ColumnEdit[options.length];
-        this.tableCellFactories = new TableCellFactory[options.length];
 
         int i = 0;
         for (Options opts : options) {
@@ -67,8 +64,6 @@ public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> imp
                     if (opt.value instanceof ColumnEdit) {
                         columnEdits[i] = (ColumnEdit) opt.value;
                     }
-                } else if (TABLE_CELL_FACTORY.equalsIgnoreCase(opt.name)) {
-                    tableCellFactories[i] = (TableCellFactory) opt.value;
                 }
             }
 
@@ -100,7 +95,6 @@ public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> imp
 
         this.columnWriters = new ColumnWriter[options.size()];
         this.columnEdits = new ColumnEdit[options.size()];
-        this.tableCellFactories = new TableCellFactory[options.size()];
 
         int i = 0;
         for (Map<String, Object> op : options) {
@@ -114,12 +108,6 @@ public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> imp
                 columnEdits[i] = (ColumnEdit) op.get(EDITABLE);
             } else {
                 columnEdits[i] = ColumnEdit.DEFAULT;
-            }
-
-            if (op.containsKey(TABLE_CELL_FACTORY) && op.get(TABLE_CELL_FACTORY) instanceof TableCellFactory) {
-                tableCellFactories[i] = (TableCellFactory) op.get(TABLE_CELL_FACTORY);
-            } else {
-                tableCellFactories[i] = TableCellFactory.DEFAULT_EDITABLE;
             }
 
             i++;
@@ -138,11 +126,5 @@ public class DefaultFXWritableTableFormat<E> extends DefaultFXTableFormat<E> imp
     public E setColumnValue(@Nonnull E baseObject, Object editedValue, int column) {
         columnWriters[column].setValue(baseObject, columnNames[column], column, editedValue);
         return baseObject;
-    }
-
-    @Nonnull
-    @Override
-    public TableCellFactory getTableCellFactory(int column) {
-        return tableCellFactories[column];
     }
 }

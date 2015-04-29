@@ -17,11 +17,9 @@ package griffon.plugins.glazedlists.javafx.models;
 
 import griffon.plugins.glazedlists.javafx.gui.FXTableFormat;
 import griffon.plugins.glazedlists.javafx.gui.FXWritableTableFormat;
-import griffon.plugins.glazedlists.javafx.gui.TableCellFactory;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -62,18 +60,13 @@ public class DefaultFXTableViewModel<E> implements FXTableViewModel<E> {
 
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     protected <T> void processWritableTableFormat(@Nonnull TableColumn<E, T> column, String columnName, int columnIndex) {
-        final FXWritableTableFormat writableFormat = (FXWritableTableFormat) format;
-        column.setCellFactory(param -> {
-            if (writableFormat.isEditable(null, columnIndex)) {
-                return writableFormat.getTableCellFactory(columnIndex).createTableCell(param);
-            }
-            return (TableCell<E, T>) TableCellFactory.DEFAULT_NON_EDITABLE;
-        });
+        // empty
     }
 
     @SuppressWarnings("unchecked")
     protected <T> void processTableFormat(@Nonnull TableColumn<E, T> column, String columnName, int columnIndex) {
         column.setCellValueFactory(cell -> (ObservableValue<T>) format.getColumnObservableValue(cell.getValue(), columnIndex));
+        column.setCellFactory(param -> format.getTableCellFactory(columnIndex).createTableCell(param));
     }
 
     @Nonnull

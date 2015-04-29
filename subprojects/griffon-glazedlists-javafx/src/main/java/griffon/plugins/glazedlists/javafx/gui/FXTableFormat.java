@@ -36,6 +36,9 @@ public interface FXTableFormat<E> extends TableFormat<E> {
     ObservableValue<?> getColumnObservableValue(E baseObject, int column);
 
     @Nonnull
+    TableCellFactory getTableCellFactory(int column);
+
+    @Nonnull
     public static Option option(@Nonnull String name, @Nonnull Object value) {
         return new Option(name, value);
     }

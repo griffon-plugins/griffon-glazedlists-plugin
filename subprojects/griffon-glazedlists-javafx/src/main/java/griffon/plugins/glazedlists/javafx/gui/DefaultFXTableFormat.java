@@ -38,31 +38,40 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
     protected final String[] columnNames;
     protected final String[] columnTitles;
     protected final ColumnReader[] columnReaders;
+    protected final TableCellFactory[] tableCellFactories;
 
     private static final String NAME = "name";
     private static final String TITLE = "title";
     private static final String READER = "reader";
+    private static final String TABLE_CELL_FACTORY = "tableCellFactory";
 
     public DefaultFXTableFormat(@Nonnull String[] columnNames) {
         this.columnNames = requireNonNull(columnNames, ERROR_COLUMN_NAMES_NULL);
         this.columnTitles = new String[columnNames.length];
         this.columnReaders = new ColumnReader[columnNames.length];
+        this.tableCellFactories = new TableCellFactory[columnNames.length];
 
         for (int i = 0; i < columnNames.length; i++) {
             columnTitles[i] = getNaturalName(columnNames[i]);
             columnReaders[i] = DefaultJavaFXColumnReader.INSTANCE;
+            tableCellFactories[i] = TableCellFactory.DEFAULT_NON_EDITABLE;
         }
     }
 
     public DefaultFXTableFormat(@Nonnull String[] columnNames, @Nonnull String[] columnTitles, @Nonnull ColumnReader[] columnReaders) {
         this.columnNames = requireNonNull(columnNames, ERROR_COLUMN_NAMES_NULL);
         this.columnTitles = requireNonNull(columnTitles, "Argument 'columnTitles' must not be null");
-        this.columnReaders = requireNonNull(columnReaders, "Argument 'columnReaders' must not be nul.");
+        this.columnReaders = requireNonNull(columnReaders, "Argument 'columnReaders' must not be nul");
+        this.tableCellFactories = new TableCellFactory[columnNames.length];
 
         requireState(columnNames.length == columnTitles.length,
             "Arguments 'columNames' and 'columnTitles' have different cardinality. " + columnNames.length + " != " + columnTitles.length);
         requireState(columnNames.length == columnReaders.length,
             "Arguments 'columNames' and 'columnReaders' have different cardinality. " + columnNames.length + " != " + columnReaders.length);
+
+        for (int i = 0; i < columnNames.length; i++) {
+            tableCellFactories[i] = TableCellFactory.DEFAULT_NON_EDITABLE;
+        }
     }
 
     /**
@@ -80,6 +89,7 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
         this.columnNames = new String[options.length];
         this.columnTitles = new String[options.length];
         this.columnReaders = new ColumnReader[options.length];
+        this.tableCellFactories = new TableCellFactory[options.length];
 
         int i = 0;
         for (Options opts : options) {
@@ -90,6 +100,8 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
                     columnTitles[i] = String.valueOf(opt.value);
                 } else if (READER.equalsIgnoreCase(opt.name)) {
                     columnReaders[i] = (ColumnReader) opt.value;
+                } else if (TABLE_CELL_FACTORY.equalsIgnoreCase(opt.name)) {
+                    tableCellFactories[i] = (TableCellFactory) opt.value;
                 }
             }
 
@@ -122,6 +134,7 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
         this.columnNames = new String[options.size()];
         this.columnTitles = new String[options.size()];
         this.columnReaders = new ColumnReader[options.size()];
+        this.tableCellFactories = new TableCellFactory[options.size()];
 
         int i = 0;
         for (Map<String, Object> op : options) {
@@ -142,6 +155,12 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
                 columnReaders[i] = (ColumnReader) op.get(READER);
             } else {
                 columnReaders[i] = DefaultJavaFXColumnReader.INSTANCE;
+            }
+
+            if (op.containsKey(TABLE_CELL_FACTORY) && op.get(TABLE_CELL_FACTORY) instanceof TableCellFactory) {
+                tableCellFactories[i] = (TableCellFactory) op.get(TABLE_CELL_FACTORY);
+            } else {
+                tableCellFactories[i] = TableCellFactory.DEFAULT_EDITABLE;
             }
 
             i++;
@@ -168,5 +187,11 @@ public class DefaultFXTableFormat<E> implements FXTableFormat<E> {
     @SuppressWarnings("unchecked")
     public ObservableValue<?> getColumnObservableValue(E baseObject, int column) {
         return (ObservableValue<?>) columnReaders[column].getValue(baseObject, columnNames[column], column);
+    }
+
+    @Nonnull
+    @Override
+    public TableCellFactory getTableCellFactory(int column) {
+        return tableCellFactories[column];
     }
 }

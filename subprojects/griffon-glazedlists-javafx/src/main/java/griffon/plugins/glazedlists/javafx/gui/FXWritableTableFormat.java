@@ -45,7 +45,4 @@ public interface FXWritableTableFormat<E> extends FXTableFormat<E> {
      */
     @Nonnull
     E setColumnValue(@Nonnull E baseObject, Object editedValue, int column);
-
-    @Nonnull
-    TableCellFactory getTableCellFactory(int column);
 }

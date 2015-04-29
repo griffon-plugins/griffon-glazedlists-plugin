@@ -28,7 +28,9 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
+import static griffon.util.GriffonClassUtils.requireState;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -66,15 +68,31 @@ public final class GlazedListsJavaFX {
     /**
      * Creates a {@link griffon.plugins.glazedlists.javafx.gui.FXTableFormat}.
      */
-    public static <T> FXTableFormat<T> tableFormat(String[] propertyNames) {
+    public static <T> FXTableFormat<T> tableFormat(@Nonnull String[] propertyNames) {
         return new DefaultFXTableFormat<>(propertyNames);
     }
 
     /**
      * Creates a {@link griffon.plugins.glazedlists.javafx.gui.FXTableFormat}.
      */
-    public static <T> FXTableFormat<T> tableFormat(String[] propertyNames, String[] columnLabels, ColumnReader[] columnReaders) {
+    public static <T> FXTableFormat<T> tableFormat(@Nonnull String[] propertyNames, @Nonnull String[] columnLabels, @Nonnull ColumnReader[] columnReaders) {
         return new DefaultFXTableFormat<>(propertyNames, columnLabels, columnReaders);
+    }
+
+    /**
+     * Creates a {@link griffon.plugins.glazedlists.javafx.gui.FXTableFormat}.
+     */
+    public static <T> FXTableFormat<T> tableFormat(@Nonnull FXTableFormat.Options... options) {
+        return new DefaultFXTableFormat<>(options);
+    }
+
+    /**
+     * Creates a {@link griffon.plugins.glazedlists.javafx.gui.FXTableFormat}.
+     */
+    public static <T> FXTableFormat<T> tableFormat(@Nonnull List<FXTableFormat.Options> options) {
+        requireNonNull(options, "Argument 'options' must not be null");
+        requireState(options.size() > 0, "Argument 'options' must not be empty");
+        return new DefaultFXTableFormat<>(options.toArray(new FXTableFormat.Options[options.size()]));
     }
 
     /**
@@ -91,7 +109,7 @@ public final class GlazedListsJavaFX {
      * @param tableFormat the object responsible for extracting column data
      *                    from the row objects
      */
-    public static <E> FXTableViewModel<E> eventTableViewModel(EventList<E> source, FXTableFormat<? super E> tableFormat) {
+    public static <E> FXTableViewModel<E> eventTableViewModel(@Nonnull EventList<E> source, @Nonnull FXTableFormat<? super E> tableFormat) {
         return eventTableViewModel(new EventObservableList<>(source), tableFormat);
     }
 
@@ -109,7 +127,7 @@ public final class GlazedListsJavaFX {
      * @param tableFormat the object responsible for extracting column data
      *                    from the row objects
      */
-    public static <E> FXTableViewModel<E> eventTableViewModel(ObservableList<E> source, FXTableFormat<? super E> tableFormat) {
+    public static <E> FXTableViewModel<E> eventTableViewModel(@Nonnull ObservableList<E> source, @Nonnull FXTableFormat<? super E> tableFormat) {
         return new DefaultFXTableViewModel<>(source, tableFormat);
     }
 
@@ -126,9 +144,9 @@ public final class GlazedListsJavaFX {
      * @param source      the EventList that provides the row objects
      * @param tableFormat the object responsible for extracting column data from the row objects
      */
-    public static <E> FXTableViewModel<E> eventTableViewModelWithThreadProxyList(EventList<E> source, FXTableFormat<? super E> tableFormat) {
+    public static <E> FXTableViewModel<E> eventTableViewModelWithThreadProxyList(@Nonnull EventList<E> source, @Nonnull FXTableFormat<? super E> tableFormat) {
         EventList<E> proxySource = createJavaFXThreadProxyList(source);
-        return new DefaultFXTableViewModel<E>(new EventObservableList<>(proxySource), tableFormat);
+        return new DefaultFXTableViewModel<>(new EventObservableList<>(proxySource), tableFormat);
     }
 
     private static class JavaFXThreadProxyEventList<E> extends ThreadProxyEventList<E> {
