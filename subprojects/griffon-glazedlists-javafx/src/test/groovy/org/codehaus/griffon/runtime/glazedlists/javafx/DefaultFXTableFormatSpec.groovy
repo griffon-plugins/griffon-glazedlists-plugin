@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package griffon.plugins.glazedlists.javafx.gui
+package org.codehaus.griffon.runtime.glazedlists.javafx
 
 import ca.odell.glazedlists.gui.TableFormat
+import griffon.plugins.glazedlists.javafx.gui.DefaultFXTableFormat
+
 //import griffon.plugins.glazedlists.gui.DefaultFXTableFormat
 import griffon.transform.FXObservable
 import spock.lang.Specification
@@ -35,7 +37,7 @@ class DefaultFXTableFormatSpec extends Specification {
         format.columnTitles == (props.keySet()*.capitalize() as String[])
         props.eachWithIndex  { k, v, i ->
             assert k.capitalize() == format.getColumnName(i)
-            assert v == format.getColumnValue(person, i)
+            assert v == format.getColumnValue(person, i).get()
         }
     }
 
@@ -57,13 +59,14 @@ class DefaultFXTableFormatSpec extends Specification {
         format.columnTitles == (props.keySet()*.capitalize() as String[])
         props.eachWithIndex  { k, v, i ->
             assert k.capitalize() == format.getColumnName(i)
-            assert v == format.getColumnValue(person, i)
+            assert v == format.getColumnValue(person, i).get()
         }
     }
 
     void 'Can create a TableFormat that handles a Map'() {
         given:
         Map props = [id: '1', name: 'Joe', lastname: 'Cool']
+        Person person = new Person(props)
 
         when:
         TableFormat<Map> format = new DefaultFXTableFormat<Map>(props.keySet() as String[])
@@ -74,7 +77,7 @@ class DefaultFXTableFormatSpec extends Specification {
         format.columnTitles == (props.keySet()*.capitalize() as String[])
         props.eachWithIndex  { k, v, i ->
             assert k.capitalize() == format.getColumnName(i)
-            assert v == format.getColumnValue(props, i)
+            assert v == format.getColumnValue(person, i).get()
         }
     }
 
