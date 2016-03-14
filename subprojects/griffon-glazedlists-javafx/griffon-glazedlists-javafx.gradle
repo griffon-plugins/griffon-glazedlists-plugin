@@ -20,7 +20,7 @@ dependencies {
     testRuntime project.files(project.jfxrtLocation)
     testRuntime "org.codehaus.griffon:griffon-guice:${griffonVersion}"
     testRuntime "org.codehaus.griffon:griffon-groovy:${griffonVersion}"
-    testRuntime 'org.slf4j:slf4j-simple:1.7.10'
+    testRuntime 'org.slf4j:slf4j-simple:1.7.13'
 }
 
 compileGroovy.enabled = false

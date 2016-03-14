@@ -69,7 +69,9 @@ public class EventObservableList<E> extends AbstractList<E> implements Observabl
 
                 ListChangeListener.Change<E> change = new ChangeAdapter(EventObservableList.this, changes_copy);
 
-                it.next().onChanged(change);
+                if (it.hasNext()) {
+                    it.next().onChanged(change);
+                }
             }
         }
     };
