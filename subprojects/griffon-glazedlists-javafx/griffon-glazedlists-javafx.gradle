@@ -5,6 +5,7 @@ apply from: rootProject.file('gradle/javafx.gradle')
 
 dependencies {
     compileOnly project.files(project.jfxrtLocation)
+    compileOnly 'org.projectlombok:lombok:1.16.8'
 
     compile project(':griffon-glazedlists-core')
 
@@ -20,7 +21,7 @@ dependencies {
     testRuntime project.files(project.jfxrtLocation)
     testRuntime "org.codehaus.griffon:griffon-guice:${griffonVersion}"
     testRuntime "org.codehaus.griffon:griffon-groovy:${griffonVersion}"
-    testRuntime 'org.slf4j:slf4j-simple:1.7.13'
+    testRuntime 'org.slf4j:slf4j-simple:1.7.18'
 }
 
 compileGroovy.enabled = false

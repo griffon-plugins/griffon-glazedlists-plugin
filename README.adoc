@@ -8,6 +8,11 @@ image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link
 image:https://api.bintray.com/packages/griffon/griffon-plugins/{project-name}/images/download.svg[link="https://bintray.com/griffon/griffon-plugins/{project-name}/_latestVersion"]
 
 ---
+
+image:https://img.shields.io/gitter/room/griffon/griffon.js.svg[link="https://gitter.im/griffon/griffon]
+image:https://img.shields.io/badge/donations-Patreon-orange.svg[https://www.patreon.com/user?u=6609318]
+
+---
 link:http://www.glazedlists.com/[GlazedLists, window="_blank"] - List transformations in Java.
 
 Refer to the link:http://griffon-plugins.github.io/{project-name}/[plugin guide, window="_blank"] for

@@ -19,6 +19,7 @@ import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.ObservableElementList;
 import ca.odell.glazedlists.TransformedList;
 import ca.odell.glazedlists.impl.gui.ThreadProxyEventList;
+import ca.odell.glazedlists.impl.swing.SwingThreadProxyEventList;
 import griffon.plugins.glazedlists.ColumnReader;
 import griffon.plugins.glazedlists.javafx.gui.DefaultFXTableFormat;
 import griffon.plugins.glazedlists.javafx.gui.FXTableFormat;
@@ -63,6 +64,10 @@ public final class GlazedListsJavaFX {
     @Nonnull
     public static <E> TransformedList<E, E> createJavaFXThreadProxyList(@Nonnull EventList<E> source) {
         return new JavaFXThreadProxyEventList<>(requireNonNull(source, "Argument 'source' must not be null"));
+    }
+
+    public static boolean isJavaFXThreadProxyList(EventList list) {
+        return list instanceof JavaFXThreadProxyEventList;
     }
 
     /**
