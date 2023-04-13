@@ -5,7 +5,7 @@ apply plugin: 'com.jfrog.bintray'
 
 def pomConfig = {
     name project.name
-    description project.projectDescription
+
     url project.projectWebsiteUrl
     inceptionYear project.projectInceptionYear
     licenses {
@@ -15,6 +15,18 @@ def pomConfig = {
             distribution 'repo'
         }
     }
+    developers {
+        developer {
+            id 'aalmiray'
+            name 'Andres Almiray'
+        }
+    }
+    scm {
+        connection 'scm:git:https://github.com/griffon-plugins/griffon-glazedlists-plugin.git'
+        developerConnection 'scm:git:https://github.com/griffon-plugins/griffon-glazedlists-plugin.git'
+        url 'https://github.com/griffon-plugins/griffon-glazedlists-plugin.git'
+        tag 'HEAD'
+    }
 }
 
 publishing {
@@ -22,6 +34,7 @@ publishing {
         mavenCustom(MavenPublication) {
             from components.java
             artifact sourceJar
+            artifact javadocJar
 
             pom.withXml {
                 // all dependencies should use the default scope (compile) but
@@ -31,10 +44,19 @@ publishing {
                         dep.remove(dep.scope)
                     }
                 }
+                def desc = asNode().appendNode('description')
+                desc.setValue('Griffon Glazedlists Plugin')
                 asNode().children().last() + pomConfig
             }
         }
     }
+    
+    repositories {
+        maven {
+            name = 'localRelease'
+            url  = "${project.rootProject.buildDir}/repos/local/release"
+        }
+    }    
 }
 
 jar {

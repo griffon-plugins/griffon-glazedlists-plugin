@@ -19,7 +19,6 @@ import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.ObservableElementList;
 import ca.odell.glazedlists.TransformedList;
 import ca.odell.glazedlists.impl.gui.ThreadProxyEventList;
-import ca.odell.glazedlists.impl.swing.SwingThreadProxyEventList;
 import griffon.plugins.glazedlists.ColumnReader;
 import griffon.plugins.glazedlists.javafx.gui.DefaultFXTableFormat;
 import griffon.plugins.glazedlists.javafx.gui.FXTableFormat;

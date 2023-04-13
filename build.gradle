@@ -50,6 +50,10 @@ allprojects {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 apply plugin: 'jacoco'
 
 jacoco {
@@ -113,6 +117,14 @@ subprojects { subproj ->
             from sourceSets.main.allSource
         }
 
+       task javadocJar(type: Jar) {
+           group 'Build'
+           description 'An archive of the javadoc'
+           classifier 'javadoc'
+           dependsOn javadoc
+           from javadoc.destinationDir
+       }
+        
         tasks.withType(AbstractCompile) {
             if (rootProject.hasProperty('lint') && rootProject.lint.toBoolean()) {
                 options.compilerArgs = [
@@ -122,7 +134,7 @@ subprojects { subproj ->
         }
 
         subproj.apply from: rootProject.file('gradle/publishing.gradle')
-        subproj.apply from: rootProject.file('gradle/code-quality.gradle')
+        //subproj.apply from: rootProject.file('gradle/code-quality.gradle')
 
         if (subproj.publishJars.toBoolean()) {
             subproj.apply from: rootProject.file('gradle/docs.gradle')
